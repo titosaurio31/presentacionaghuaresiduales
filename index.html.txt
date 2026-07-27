@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aguas Residuales y Canaletas - 2da Evaluación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #0ea5e9;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --card-bg: rgba(255,255,255,0.08);
+      --glass: rgba(255,255,255,0.05);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .presentation-container {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg-animation {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(14,165,233,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(245,158,11,0.08) 0%, transparent 50%);
+    }
+
+    .floating-particles {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px; height: 4px;
+      background: rgba(14,165,233,0.4);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) translateX(50px); opacity: 0; }
+    }
+
+    .slides-wrapper {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 60px;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+
+    .slide.prev {
+      transform: translateX(-100px);
+      opacity: 0;
+    }
+
+    .slide-content {
+      max-width: 1100px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .slide-number {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .slide-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .slide-subtitle {
+      font-size: 1.3rem;
+      color: #94a3b8;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: left;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 20px 40px rgba(14,165,233,0.2);
+    }
+
+    .card-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .card p, .card ul {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .card ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .info-block {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 35px 45px;
+      border: 1px solid rgba(255,255,255,0.08);
+      text-align: left;
+      margin: 20px 0;
+    }
+
+    .info-block h3 {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .info-block p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 25px;
+      font-size: 0.95rem;
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 16px 20px;
+      text-align: left;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .comparison-table th:first-child { border-radius: 12px 0 0 0; }
+    .comparison-table th:last-child { border-radius: 0 12px 0 0; }
+
+    .comparison-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #cbd5e1;
+    }
+
+    .comparison-table tr:hover td {
+      background: rgba(14,165,233,0.05);
+    }
+
+    .nav-controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(15,23,42,0.8);
+      backdrop-filter: blur(20px);
+      padding: 12px 28px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      font-weight: 500;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      z-index: 100;
+      transition: width 0.4s ease;
+    }
+
+    .hero-slide .slide-title {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 8px 24px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(6,182,212,0.1));
+      border-left: 4px solid var(--primary);
+      padding: 20px 25px;
+      border-radius: 0 12px 12px 0;
+      margin: 15px 0;
+    }
+
+    .highlight-box p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .badge-domestic { background: rgba(34,197,94,0.2); color: #4ade80; }
+    .badge-industrial { background: rgba(239,68,68,0.2); color: #f87171; }
+    .badge-agricultural { background: rgba(245,158,11,0.2); color: #fbbf24; }
+    .badge-pluvial { background: rgba(59,130,246,0.2); color: #60a5fa; }
+
+    /* ===== ACCORDION STYLES - MINIMAL ===== */
+    .accordion-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .accordion-item {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .accordion-item:hover {
+      border-color: rgba(14,165,233,0.3);
+    }
+
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      color: #e2e8f0;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .accordion-header:hover {
+      background: rgba(14,165,233,0.05);
+    }
+
+    .accordion-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .accordion-header-left .icon {
+      font-size: 1.3rem;
+      width: 32px;
+      text-align: center;
+    }
+
+    .accordion-arrow {
+      font-size: 0.8rem;
+      color: #64748b;
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-item.open .accordion-arrow {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;
+      padding: 0 22px;
+    }
+
+    .accordion-item.open .accordion-body {
+      max-height: 400px;
+      padding: 0 22px 18px 22px;
+    }
+
+    .accordion-body p, .accordion-body ul {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .accordion-body ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 8px;
+    }
+
+    .accordion-body ul li {
+      padding-left: 18px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+
+    .accordion-body ul li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .accordion-section-title {
+      text-align: left;
+      color: var(--accent);
+      margin: 25px 0 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ===== MEMBER CARDS ===== */
+    .members-grid {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .member-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 40px 35px;
+      text-align: center;
+      width: 280px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .member-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .member-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 25px 50px rgba(14,165,233,0.15);
+    }
+
+    .member-card:hover::before {
+      opacity: 1;
+    }
+
+    .member-avatar {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 20px;
+      border: 3px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .member-card:hover .member-avatar {
+      transform: scale(1.1);
+      border-color: rgba(255,255,255,0.3);
+      box-shadow: 0 0 30px rgba(14,165,233,0.3);
+    }
+
+    .member-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .member-role {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .member-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .member-social {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .member-social span {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .member-social span:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .closing-text {
+      margin-top: 50px;
+      font-size: 1.1rem;
+      color: #64748b;
+    }
+
+    .closing-text strong {
+      color: var(--accent);
+    }
+
+    /* ===== AUDIO PLAYER STYLES ===== */
+    .audio-player {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(15,23,42,0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .audio-player:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(14,165,233,0.2);
+    }
+
+    .audio-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .audio-player audio {
+      height: 32px;
+      width: 200px;
+    }
+
+    .audio-player audio::-webkit-media-controls-panel {
+      background: transparent;
+    }
+
+    .audio-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: transparent;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .audio-toggle:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .audio-toggle.muted {
+      color: #ef4444;
+      border-color: rgba(239,68,68,0.4);
+    }
+
+    @media (max-width: 900px) {
+      .slide { padding: 20px 30px; }
+      .slide-title { font-size: 2rem; }
+      .hero-slide .slide-title { font-size: 2.5rem; }
+      .two-column { grid-template-columns: 1fr; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .members-grid { gap: 25px; }
+      .member-card { width: 100%; max-width: 300px; }
+      .audio-player { 
+        top: 10px; 
+        right: 10px; 
+        padding: 8px 12px;
+      }
+      .audio-player audio { width: 140px; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+<base target="_blank">
+</head>
+<body>
+  <div class="bg-animation"></div>
+  <div class="floating-particles" id="particles"></div>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- ===== AUDIO PLAYER ===== -->
+  <div class="audio-player" id="audioPlayer">
+    <span class="audio-label">🎙️ Diap. <span id="audioSlideNum">1</span></span>
+    <audio id="slideAudio" controls preload="auto">
+      <source src="audio/slide01.mp3" type="audio/mpeg">
+      Tu navegador no soporta audio HTML5.
+    </audio>
+    <button class="audio-toggle" id="muteBtn" onclick="toggleMute()" title="Silenciar/Reanudar">🔊</button>
+  </div>
+
+  <div class="presentation-container">
+    <div class="slides-wrapper" id="slidesWrapper">
+
+      <!-- SLIDE 1: Portada -->
+      <div class="slide active hero-slide" data-slide="1">
+        <div class="slide-content">
+          <div class="hero-badge animate-in">💧 2da Evaluación — Trabajo en Pareja</div>
+          <h1 class="slide-title animate-in delay-1">Aguas Residuales<br>y Canaletas</h1>
+          <p class="slide-subtitle animate-in delay-2">
+            Clasificación, tipos, importancia y sistemas de evacuación<br>
+            <span style="color: var(--accent); font-weight: 500;">Una presentación interactiva</span>
+          </p>
+          <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center;" class="animate-in delay-3">
+            <div style="background: var(--card-bg); padding: 15px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <span style="font-size: 1.5rem;">🏠</span><br>
+              <span style="font-size: 0.85rem; color: #94a3b8;">Uso doméstico</span>
+            </div>
+            <div style="background: var(--card-bg); padding: 15px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <span style="font-size: 1.5rem;">🏭</span><br>
+              <span style="font-size: 0.85rem; color: #94a3b8;">Industrial</span>
+            </div>
+            <div style="background: var(--card-bg); padding: 15px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+              <span style="font-size: 1.5rem;">🌧️</span><br>
+              <span style="font-size: 0.85rem; color: #94a3b8;">Pluvial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: ¿Qué son las Aguas Residuales? -->
+      <div class="slide" data-slide="2">
+        <div class="slide-content" style="text-align: left;">
+          <div class="slide-number">Sección 1 — Definición</div>
+          <h2 class="slide-title" style="text-align: center;">¿Qué son las Aguas Residuales?</h2>
+
+          <div class="info-block animate-in">
+            <h3>📖 Definición Oficial</h3>
+            <p>Las <strong>aguas residuales</strong> son cualquier tipo de agua cuya calidad ha sido afectada negativamente por la influencia antropogénica (actividad humana). Se trata de agua que <strong>no tiene valor inmediato</strong> para el fin para el que se utilizó ni para el propósito para el que se produjo, debido a su calidad, cantidad o momento de disposición.</p>
+          </div>
+
+          <div class="two-column" style="margin-top: 25px;">
+            <div class="highlight-box animate-in delay-1">
+              <p><strong>Según la UNESCO (2017):</strong> El <span style="color: var(--accent); font-size: 1.3rem; font-weight: 700;">80%</span> de las aguas residuales retornan al ecosistema <strong>sin ser tratadas o reutilizadas</strong>, siendo uno de los grandes desafíos del agua a nivel mundial.</p>
+            </div>
+            <div class="highlight-box animate-in delay-2">
+              <p><strong>Contaminantes presentes:</strong><br>
+              🔹 <strong>Físicos:</strong> Color, temperatura, olor<br>
+              🔹 <strong>Químicos:</strong> Metales pesados, detergentes, solventes<br>
+              🔹 <strong>Biológicos:</strong> Bacterias, virus, parásitos, materia fecal</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Clasificación por Origen -->
+      <div class="slide" data-slide="3">
+        <div class="slide-content">
+          <div class="slide-number">Sección 2 — Clasificación</div>
+          <h2 class="slide-title">¿Cómo se clasifican según su origen?</h2>
+          <p class="slide-subtitle">Las aguas residuales se clasifican principalmente por su procedencia, lo que determina el tipo y nivel de contaminantes</p>
+
+          <div class="cards-grid">
+            <div class="card animate-in">
+              <div class="card-icon">🏠</div>
+              <span class="type-badge badge-domestic">Doméstico</span>
+              <h3>Aguas Residuales Domésticas</h3>
+              <p>Proceden de <strong>viviendas, oficinas, comedores y baños</strong>. Resultan de actividades cotidianas como ducharse, cocinar, usar el inodoro o lavar ropa.</p>
+              <ul style="margin-top: 12px;">
+                <li>Alta carga de materia orgánica</li>
+                <li>Patógenos y bacterias</li>
+                <li>Detergentes y jabones</li>
+                <li>Grasas y aceites</li>
+              </ul>
+            </div>
+
+            <div class="card animate-in delay-1">
+              <div class="card-icon">🏭</div>
+              <span class="type-badge badge-industrial">Industrial</span>
+              <h3>Aguas Residuales Industriales</h3>
+              <p>Generadas por <strong>procesos productivos</strong> en fábricas, refinerías, plantas químicas y manufactureras.</p>
+              <ul style="margin-top: 12px;">
+                <li>Metales pesados (plomo, mercurio, cadmio)</li>
+                <li>Compuestos químicos sintéticos</li>
+                <li>pH extremo (ácido o alcalino)</li>
+                <li>Disolventes y colorantes</li>
+              </ul>
+            </div>
+
+            <div class="card animate-in delay-2">
+              <div class="card-icon">🌾</div>
+              <span class="type-badge badge-agricultural">Agrícola</span>
+              <h3>Aguas Agrícolas y Ganaderas</h3>
+              <p>Producidas por <strong>riego de cultivos, cría de animales</strong> y limpieza de instalaciones agropecuarias.</p>
+              <ul style="margin-top: 12px;">
+                <li>Pesticidas y herbicidas</li>
+                <li>Fertilizantes (nitrógeno, fósforo)</li>
+                <li>Heces fecales y orina animal</li>
+                <li>Sedimentos y nutrientes</li>
+              </ul>
+            </div>
+
+            <div class="card animate-in delay-3">
+              <div class="card-icon">🌧️</div>
+              <span class="type-badge badge-pluvial">Pluvial</span>
+              <h3>Aguas Residuales Pluviales</h3>
+              <p>Agua de lluvia que <strong>arrastra contaminantes</strong> al caer sobre superficies urbanas, techos y calles.</p>
+              <ul style="margin-top: 12px;">
+                <li>Aceites y hidrocarburos</li>
+                <li>Metales pesados de calles</li>
+                <li>Sedimentos y basura</li>
+                <li>Contaminantes atmosféricos</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Los 3 Tipos Principales -->
+      <div class="slide" data-slide="4">
+        <div class="slide-content">
+          <div class="slide-number">Sección 3 — Tipos Principales</div>
+          <h2 class="slide-title">Los 3 Tipos de Aguas Residuales</h2>
+          <p class="slide-subtitle">Según la normativa y clasificación técnica internacional</p>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px;">
+            <div class="animate-in" style="background: linear-gradient(180deg, rgba(34,197,94,0.1), rgba(34,197,94,0.02)); border: 1px solid rgba(34,197,94,0.3); border-radius: 24px; padding: 35px 25px; text-align: center;">
+              <div style="font-size: 3.5rem; margin-bottom: 15px;">🏠</div>
+              <h3 style="font-size: 1.4rem; color: #4ade80; margin-bottom: 15px;">1. Domésticas</h3>
+              <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.7;">De hogares y servicios. Contienen materia orgánica biodegradable, nutrientes y microorganismos patógenos.</p>
+              <div style="margin-top: 20px; padding: 12px; background: rgba(34,197,94,0.1); border-radius: 10px;">
+                <span style="font-size: 0.85rem; color: #4ade80;">💧 Tratamiento: Biológico</span>
+              </div>
+            </div>
+
+            <div class="animate-in delay-1" style="background: linear-gradient(180deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02)); border: 1px solid rgba(239,68,68,0.3); border-radius: 24px; padding: 35px 25px; text-align: center;">
+              <div style="font-size: 3.5rem; margin-bottom: 15px;">🏭</div>
+              <h3 style="font-size: 1.4rem; color: #f87171; margin-bottom: 15px;">2. Industriales</h3>
+              <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.7;">De procesos productivos. Contienen metales pesados, químicos sintéticos y pH extremo.</p>
+              <div style="margin-top: 20px; padding: 12px; background: rgba(239,68,68,0.1); border-radius: 10px;">
+                <span style="font-size: 0.85rem; color: #f87171;">⚗️ Tratamiento: Físico-Químico</span>
+              </div>
+            </div>
+
+            <div class="animate-in delay-2" style="background: linear-gradient(180deg, rgba(245,158,11,0.1), rgba(245,158,11,0.02)); border: 1px solid rgba(245,158,11,0.3); border-radius: 24px; padding: 35px 25px; text-align: center;">
+              <div style="font-size: 3.5rem; margin-bottom: 15px;">🌾</div>
+              <h3 style="font-size: 1.4rem; color: #fbbf24; margin-bottom: 15px;">3. Agrícolas</h3>
+              <p style="font-size: 0.95rem; color: #cbd5e1; line-height: 1.7;">De riego y ganadería. Contienen pesticidas, fertilizantes y desechos orgánicos animales.</p>
+              <div style="margin-top: 20px; padding: 12px; background: rgba(245,158,11,0.1); border-radius: 10px;">
+                <span style="font-size: 0.85rem; color: #fbbf24;">🌱 Tratamiento: Filtración + Biológico</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="highlight-box animate-in delay-3" style="margin-top: 30px; text-align: center;">
+            <p><strong>Nota importante:</strong> Las <strong>aguas urbanas</strong> son la mezcla de domésticas + industriales (si van al alcantarillado) + pluviales. Las <strong>aguas negras y grises</strong> son subcategorías de las domésticas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Aguas Negras vs Grises -->
+      <div class="slide" data-slide="5">
+        <div class="slide-content">
+          <div class="slide-number">Sección 3.1 — Subcategorías</div>
+          <h2 class="slide-title">Aguas Negras vs Aguas Grises</h2>
+          <p class="slide-subtitle">Dentro de las aguas domésticas existen dos categorías fundamentales</p>
+
+          <div class="two-column" style="margin-top: 30px; text-align: left;">
+            <div class="animate-in" style="background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,41,59,0.9)); border: 1px solid rgba(239,68,68,0.4); border-radius: 20px; padding: 35px;">
+              <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <span style="font-size: 2.5rem;">🚽</span>
+                <div>
+                  <h3 style="color: #f87171; font-size: 1.5rem;">Aguas Negras</h3>
+                  <span style="font-size: 0.85rem; color: #94a3b8;">Blackwater / Wastewater</span>
+                </div>
+              </div>
+              <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 20px;">Proceden exclusivamente de <strong>inodoros y urinarios</strong>. Contienen excrementos, orina, papel higiénico y desechos sólidos orgánicos.</p>
+              <div style="background: rgba(239,68,68,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                <strong style="color: #f87171;">Características:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px; color: #cbd5e1; line-height: 1.8;">
+                  <li>Alta concentración de materia orgánica</li>
+                  <li>Microorganismos patógenos (bacterias, parásitos)</li>
+                  <li>Nutrientes (nitrógeno y fósforo)</li>
+                  <li>Alto riesgo sanitario</li>
+                  <li>Requieren desinfección obligatoria</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="animate-in delay-1" style="background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,41,59,0.9)); border: 1px solid rgba(34,197,94,0.4); border-radius: 20px; padding: 35px;">
+              <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <span style="font-size: 2.5rem;">🚿</span>
+                <div>
+                  <h3 style="color: #4ade80; font-size: 1.5rem;">Aguas Grises</h3>
+                  <span style="font-size: 0.85rem; color: #94a3b8;">Greywater / Sullage</span>
+                </div>
+              </div>
+              <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 20px;">Proceden de <strong>duchas, lavamanos, lavadoras y cocinas</strong> (sin inodoro). No contienen residuos fecales.</p>
+              <div style="background: rgba(34,197,94,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+                <strong style="color: #4ade80;">Características:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px; color: #cbd5e1; line-height: 1.8;">
+                  <li>Menor carga orgánica</li>
+                  <li>Menos patógenos</li>
+                  <li>Detergentes y tensioactivos</li>
+                  <li>Grasas y aceites de cocina</li>
+                  <li>Ideales para reúso (riego, descargas)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: Tipos de Canaletas - CON ACORDEÓN MINIMAL -->
+      <div class="slide" data-slide="6">
+        <div class="slide-content">
+          <div class="slide-number">Sección 4 — Canaletas</div>
+          <h2 class="slide-title">¿Diferentes Tipos de Canaletas?</h2>
+          <p class="slide-subtitle">Sistemas de evacuación de aguas pluviales clasificados por material y forma</p>
+
+          <div class="accordion-section-title animate-in">🔧 Según el Material</div>
+
+          <div class="accordion-container animate-in delay-1">
+            <div class="accordion-item" data-accordion="metal">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">🔩</span>
+                  <span>Canaletas Metálicas</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Las más comunes por su resistencia. Incluyen:</p>
+                <ul>
+                  <li><strong>Aluminio:</strong> Mejor opción. Ligero, maleable, sin uniones (continuo)</li>
+                  <li><strong>Zinc:</strong> Muy duradero, resistente a inclemencias</li>
+                  <li><strong>Galvanizado:</strong> Baño de zinc, buena resistencia</li>
+                  <li><strong>Cobre:</strong> Mayor precio, acabado estético premium</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="accordion-item" data-accordion="pvc">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">🧱</span>
+                  <span>Canaletas de PVC</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Material plástico usado en fontanería:</p>
+                <ul>
+                  <li>Resistente a corrosión y UV</li>
+                  <li>Ligero y fácil de instalar</li>
+                  <li>Económico y de bajo mantenimiento</li>
+                  <li>Variedad de colores y tamaños</li>
+                  <li>Requiere uniones (punto potencial de fugas)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="accordion-item" data-accordion="ceramica">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">🏺</span>
+                  <span>Canaletas de Cerámica</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Tradicionales, usadas en construcciones rústicas:</p>
+                <ul>
+                  <li>Uso histórico y decorativo</li>
+                  <li>Se ven en casas rústicas antiguas</li>
+                  <li>Prácticamente en desuso hoy en día</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="accordion-item" data-accordion="madera">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">🎋</span>
+                  <span>Canaletas de Madera / Bambú</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Usadas principalmente en Asia y jardines exóticos:</p>
+                <ul>
+                  <li>Comunes en Asia (bambú)</li>
+                  <li>Uso decorativo en jardines europeos</li>
+                  <li>Crean ambiente natural y exótico</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-section-title animate-in delay-2">📐 Según la Forma</div>
+
+          <div class="accordion-container animate-in delay-3">
+            <div class="accordion-item" data-accordion="circular">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">🔵</span>
+                  <span>Canalones Circulares</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Forma semicircular en canaletas y circular en bajantes. Son los más comunes y tradicionales. Ventaja: <strong>mantenimiento muy bajo</strong> ya que no acumulan suciedad en aristas.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item" data-accordion="cuadrada">
+              <button class="accordion-header" onclick="toggleAccordion(this)">
+                <span class="accordion-header-left">
+                  <span class="icon">⬜</span>
+                  <span>Canaletas Cuadradas / Rectangulares</span>
+                </span>
+                <span class="accordion-arrow">▼</span>
+              </button>
+              <div class="accordion-body">
+                <p>Instaladas en edificios modernos de líneas rectas. Aportan un toque contemporáneo. Requieren <strong>limpiezas periódicas</strong> porque la suciedad se acumula en las aristas, aumentando riesgo de atascos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 7: Importancia de las Canaletas -->
+      <div class="slide" data-slide="7">
+        <div class="slide-content">
+          <div class="slide-number">Sección 5 — Importancia</div>
+          <h2 class="slide-title">Importancia del Uso de Canaletas en las Casas</h2>
+          <p class="slide-subtitle">¿Por qué son indispensables para proteger tu hogar?</p>
+
+          <div class="two-column" style="margin-top: 30px; text-align: left;">
+            <div>
+              <div class="info-block animate-in" style="margin-bottom: 20px;">
+                <h3>🛡️ Protección Estructural</h3>
+                <p>Las canaletas <strong>evitan filtraciones y humedades</strong> en techos, paredes y sótanos. El agua de lluvia cae controladamente hacia los bajantes, sin dañar fachadas ni cimientos.</p>
+              </div>
+              <div class="info-block animate-in delay-1" style="margin-bottom: 20px;">
+                <h3>💰 Ahorro Económico</h3>
+                <p>Previene <strong>gastos costosos</strong> en reparaciones por goteras, desgaste de pintura, deterioro de materiales y daños en jardines o patios.</p>
+              </div>
+              <div class="info-block animate-in delay-2">
+                <h3>🏥 Salud y Bienestar</h3>
+                <p>Evita la proliferación de <strong>humedades que causan moho</strong>, hongos y problemas respiratorios. También previene encharcamientos que atraen mosquitos.</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="info-block animate-in delay-1" style="margin-bottom: 20px;">
+                <h3>🌧️ Control Pluvial</h3>
+                <p>Canalizan el agua de lluvia de manera <strong>controlada y segura</strong>, evitando acumulaciones que generan charcos, erosión del suelo y daños en zonas exteriores.</p>
+              </div>
+              <div class="info-block animate-in delay-2" style="margin-bottom: 20px;">
+                <h3>♻️ Reúso de Agua</h3>
+                <p>El agua pluvial recolectada puede usarse para <strong>riego de jardines, lavado de exteriores</strong> o llenado de fuentes, contribuyendo al ahorro de agua potable.</p>
+              </div>
+              <div class="info-block animate-in delay-3">
+                <h3>🏠 Valor Inmobiliario</h3>
+                <p>Una buena instalación de canaletas <strong>protege el valor del inmueble</strong>, prolonga la vida útil de la construcción y mejora la estética exterior.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="highlight-box animate-in delay-3" style="margin-top: 25px; text-align: center;">
+            <p style="font-size: 1.1rem;"><strong>💡 Conclusión:</strong> Las canaletas no son solo "tubos para la lluvia" — son un <strong>sistema de protección integral</strong> para la salud, economía y durabilidad de tu hogar.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: Tabla Comparativa Canaletas -->
+      <div class="slide" data-slide="8">
+        <div class="slide-content">
+          <div class="slide-number">Sección 6 — Comparativa</div>
+          <h2 class="slide-title">Comparativa de Materiales de Canaletas</h2>
+          <p class="slide-subtitle">¿Cuál elegir según tus necesidades?</p>
+
+          <div style="margin-top: 30px; overflow-x: auto;">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Durabilidad</th>
+                  <th>Precio</th>
+                  <th>Mantenimiento</th>
+                  <th>Estética</th>
+                  <th>Recomendación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>🔩 Aluminio</strong></td>
+                  <td>⭐⭐⭐⭐⭐ Excelente</td>
+                  <td>💰💰💰 Medio-Alto</td>
+                  <td>🧹 Muy bajo</td>
+                  <td>🎨 Moderna/Clásica</td>
+                  <td>✅ <strong>Mejor opción general</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>🧱 PVC</strong></td>
+                  <td>⭐⭐⭐⭐ Buena</td>
+                  <td>💰 Económico</td>
+                  <td>🧹 Bajo</td>
+                  <td>🎨 Funcional</td>
+                  <td>✅ Ideal para presupuestos ajustados</td>
+                </tr>
+                <tr>
+                  <td><strong>🔩 Zinc</strong></td>
+                  <td>⭐⭐⭐⭐⭐ Excelente</td>
+                  <td>💰💰💰💰 Alto</td>
+                  <td>🧹 Muy bajo</td>
+                  <td>🎨 Clásica premium</td>
+                  <td>✅ Para construcciones de lujo</td>
+                </tr>
+                <tr>
+                  <td><strong>🟤 Cobre</strong></td>
+                  <td>⭐⭐⭐⭐⭐ Excelente</td>
+                  <td>💰💰💰💰💰 Muy alto</td>
+                  <td>🧹 Bajo</td>
+                  <td>🎨 Premium único</td>
+                  <td>✅ Para proyectos exclusivos</td>
+                </tr>
+                <tr>
+                  <td><strong>🏺 Cerámica</strong></td>
+                  <td>⭐⭐⭐ Regular</td>
+                  <td>💰💰 Medio</td>
+                  <td>🧹 Alto</td>
+                  <td>🎨 Rústica tradicional</td>
+                  <td>⚠️ Uso decorativo/histórico</td>
+                </tr>
+                <tr>
+                  <td><strong>🎋 Bambú/Madera</strong></td>
+                  <td>⭐⭐ Baja</td>
+                  <td>💰💰 Medio</td>
+                  <td>🧹 Muy alto</td>
+                  <td>🎨 Exótica natural</td>
+                  <td>⚠️ Solo para jardines decorativos</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 9: Conclusiones -->
+      <div class="slide" data-slide="9">
+        <div class="slide-content">
+          <div class="slide-number">Sección 7 — Conclusiones</div>
+          <h2 class="slide-title">Conclusiones Finales</h2>
+          <p class="slide-subtitle">Resumen de lo aprendido</p>
+
+          <div class="cards-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 30px auto;">
+            <div class="info-block animate-in" style="text-align: left;">
+              <h3>🎯 Puntos Clave</h3>
+              <div style="display: grid; gap: 15px; margin-top: 15px;">
+                <div style="display: flex; align-items: start; gap: 15px;">
+                  <span style="font-size: 1.5rem;">1️⃣</span>
+                  <p>Las <strong>aguas residuales</strong> son aguas cuya calidad se ha degradado por actividad humana y requieren tratamiento antes de retornar al ecosistema.</p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 15px;">
+                  <span style="font-size: 1.5rem;">2️⃣</span>
+                  <p>Se clasifican en <strong>domésticas, industriales y agrícolas</strong> según su origen, cada una con contaminantes y tratamientos específicos.</p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 15px;">
+                  <span style="font-size: 1.5rem;">3️⃣</span>
+                  <p>Dentro de las domésticas distinguimos <strong>aguas negras</strong> (inodoros, alta carga patógena) y <strong>aguas grises</strong> (duchas, cocina, menor carga, reutilizables).</p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 15px;">
+                  <span style="font-size: 1.5rem;">4️⃣</span>
+                  <p>Las <strong>canaletas</strong> son esenciales para proteger la estructura, salud y economía del hogar, evacuando aguas pluviales de forma controlada.</p>
+                </div>
+                <div style="display: flex; align-items: start; gap: 15px;">
+                  <span style="font-size: 1.5rem;">5️⃣</span>
+                  <p>El <strong>aluminio</strong> es el material más recomendado por su durabilidad, ligereza y mantenimiento mínimo; el <strong>PVC</strong> es la opción económica más popular.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 30px; text-align: center;" class="animate-in delay-2">
+            <div style="display: inline-block; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 20px 50px; border-radius: 16px;">
+              <p style="font-size: 1.2rem; font-weight: 700; color: #fff;">🎓 ¡Gracias por su atención!</p>
+              <p style="font-size: 0.95rem; color: rgba(255,255,255,0.9); margin-top: 8px;">2da Evaluación — Trabajo en Pareja</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 10: Miembros del Equipo -->
+      <div class="slide" data-slide="10">
+        <div class="slide-content">
+          <div class="slide-number">Sección 8 — Créditos</div>
+          <h2 class="slide-title">Miembros del Equipo</h2>
+          <p class="slide-subtitle">Trabajo en pareja — 2da Evaluación</p>
+
+          <div class="members-grid">
+            <div class="member-card animate-in">
+              <div class="member-avatar">👤</div>
+              <div class="member-name">Gary Sinclair</div>
+              <div class="member-role">Integrante 1</div>
+              <div class="member-desc">Investigación, redacción y diseño de la presentación interactiva sobre aguas residuales y canaletas.</div>
+              <div class="member-social">
+                <span>📧</span>
+                <span>💬</span>
+              </div>
+            </div>
+
+            <div class="member-card animate-in delay-1">
+              <div class="member-avatar">👤</div>
+              <div class="member-name">Félix Estrada</div>
+              <div class="member-role">Integrante 2</div>
+              <div class="member-desc">Investigación, redacción y diseño de la presentación interactiva sobre aguas residuales y canaletas.</div>
+              <div class="member-social">
+                <span>📧</span>
+                <span>💬</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="closing-text animate-in delay-2">
+            <p>💧 <strong>Aguas Residuales y Canaletas</strong> — 2da Evaluación</p>
+            <p style="font-size: 0.9rem; margin-top: 8px;">Presentación elaborada con dedicación y creatividad</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-controls">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◀</button>
+    <span class="slide-counter" id="slideCounter">1 / 10</span>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">▶</button>
+  </div>
+
+  <script>
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 15 + 's';
+      p.style.animationDuration = (10 + Math.random() * 10) + 's';
+      p.style.width = (2 + Math.random() * 4) + 'px';
+      p.style.height = p.style.width;
+      particlesContainer.appendChild(p);
+    }
+
+    let currentSlide = 1;
+    const totalSlides = 10;
+
+    // ===== AUDIO SYSTEM =====
+    const audioElement = document.getElementById('slideAudio');
+    const audioSlideNum = document.getElementById('audioSlideNum');
+    const muteBtn = document.getElementById('muteBtn');
+    let isMuted = false;
+
+    function updateAudio(slideNum) {
+  // Si es la diapositiva 10, no hay audio, solo pausamos
+  if (slideNum === 10) {
+    audioElement.pause();
+    audioElement.src = '';
+    audioSlideNum.textContent = '—';
+    return;
+  }
+  
+  // Pausa el audio actual
+  audioElement.pause();
+  
+  // Actualiza la fuente del audio
+  const audioSrc = 'diapositiva' + slideNum + '.mp3.mp3';
+  audioElement.src = audioSrc;
+  audioSlideNum.textContent = slideNum;
+  
+  // Carga y reproduce el nuevo audio (si no esta silenciado)
+  audioElement.load();
+  if (!isMuted) {
+    audioElement.play().catch(function(e) {
+      console.log('Autoplay bloqueado por el navegador. El usuario debe interactuar primero.');
+    });
+  }
+}
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      audioElement.muted = isMuted;
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+      muteBtn.classList.toggle('muted', isMuted);
+
+      if (!isMuted && audioElement.paused) {
+        audioElement.play().catch(function() {});
+      }
+    }
+
+    function updateSlides() {
+      document.querySelectorAll('.slide').forEach(function(slide) {
+        const num = parseInt(slide.dataset.slide);
+        slide.classList.remove('active', 'prev');
+        if (num === currentSlide) {
+          slide.classList.add('active');
+        } else if (num < currentSlide) {
+          slide.classList.add('prev');
+        }
+      });
+
+      document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+      document.getElementById('progressBar').style.width = (currentSlide / totalSlides * 100) + '%';
+      document.getElementById('prevBtn').disabled = currentSlide === 1;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+
+      // Actualiza el audio al cambiar de diapositiva
+      updateAudio(currentSlide);
+    }
+
+    function changeSlide(direction) {
+      const newSlide = currentSlide + direction;
+      if (newSlide >= 1 && newSlide <= totalSlides) {
+        currentSlide = newSlide;
+        updateSlides();
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+      if (e.key === 'ArrowLeft') changeSlide(-1);
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', function(e) {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        changeSlide(diff > 0 ? 1 : -1);
+      }
+    });
+
+    // ===== ACCORDION LOGIC =====
+    function toggleAccordion(header) {
+      const item = header.parentElement;
+      const isOpen = item.classList.contains('open');
+
+      // Close all accordions in the same container
+      const container = item.closest('.accordion-container');
+      container.querySelectorAll('.accordion-item').forEach(function(acc) {
+        acc.classList.remove('open');
+      });
+
+      // Open clicked one if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+      }
+    }
+
+    updateSlides();
+  </script>
+</body>
+</html>
