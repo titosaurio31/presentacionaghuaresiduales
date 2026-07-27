@@ -696,6 +696,14 @@
   <div class="floating-particles" id="particles"></div>
   <div class="progress-bar" id="progressBar"></div>
 
+  <!-- ===== START OVERLAY ===== -->
+  <div id="startOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; background:rgba(15,23,42,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; transition:opacity 0.5s ease;">
+    <div style="font-size:5rem; margin-bottom:20px;">▶️</div>
+    <h2 style="font-size:2rem; color:#fff; margin-bottom:15px;">Iniciar Presentación</h2>
+    <p style="color:#94a3b8; font-size:1.1rem;">Haz clic para comenzar con audio</p>
+  </div>
+
+
   <!-- ===== AUDIO PLAYER ===== -->
   <div class="audio-player" id="audioPlayer">
     <span class="audio-label">🎙️ Diap. <span id="audioSlideNum">1</span></span>
@@ -1269,30 +1277,22 @@
     let isMuted = false;
 
     function updateAudio(slideNum) {
-  // Si es la diapositiva 10, no hay audio, solo pausamos
-  if (slideNum === 10) {
-    audioElement.pause();
-    audioElement.src = '';
-    audioSlideNum.textContent = '—';
-    return;
-  }
-  
-  // Pausa el audio actual
-  audioElement.pause();
-  
-  // Actualiza la fuente del audio
-  const audioSrc = 'diapositiva' + slideNum + '.mp3.mp3';
-  audioElement.src = audioSrc;
-  audioSlideNum.textContent = slideNum;
-  
-  // Carga y reproduce el nuevo audio (si no esta silenciado)
-  audioElement.load();
-  if (!isMuted) {
-    audioElement.play().catch(function(e) {
-      console.log('Autoplay bloqueado por el navegador. El usuario debe interactuar primero.');
-    });
-  }
-}
+      // Pausa el audio actual
+      audioElement.pause();
+
+      // Actualiza la fuente del audio
+      const audioSrc = 'audio/slide' + String(slideNum).padStart(2, '0') + '.mp3';
+      audioElement.src = audioSrc;
+      audioSlideNum.textContent = slideNum;
+
+      // Carga y reproduce el nuevo audio (si no esta silenciado)
+      audioElement.load();
+      if (!isMuted) {
+        audioElement.play().catch(function(e) {
+          console.log('Autoplay bloqueado por el navegador. El usuario debe interactuar primero.');
+        });
+      }
+    }
 
     function toggleMute() {
       isMuted = !isMuted;
@@ -1363,6 +1363,26 @@
         item.classList.add('open');
       }
     }
+
+    
+    // ===== START OVERLAY =====
+    const startOverlay = document.getElementById('startOverlay');
+    let presentationStarted = false;
+
+    startOverlay.addEventListener('click', function() {
+      presentationStarted = true;
+      startOverlay.style.opacity = '0';
+      setTimeout(function() {
+        startOverlay.style.display = 'none';
+      }, 500);
+
+      // Intenta reproducir el audio de la primera diapositiva
+      if (!isMuted) {
+        audioElement.play().catch(function(e) {
+          console.log('Autoplay bloqueado');
+        });
+      }
+    });
 
     updateSlides();
   </script>
