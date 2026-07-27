@@ -659,6 +659,53 @@
       border-color: rgba(239,68,68,0.4);
     }
 
+    /* ===== VIDEO STYLES ===== */
+    .video-container {
+      max-width: 600px;
+      width: 100%;
+      margin: 20px auto 30px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(14,165,233,0.25);
+      transition: all 0.4s ease;
+      background: rgba(15,23,42,0.6);
+    }
+
+    .video-container:hover {
+      border-color: var(--primary);
+      box-shadow: 0 25px 70px rgba(14,165,233,0.35);
+      transform: translateY(-4px);
+    }
+
+    .video-container video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 20px;
+    }
+
+    /* Estilos personalizados para controles de video */
+    .video-container video::-webkit-media-controls-panel {
+      background: linear-gradient(transparent, rgba(15,23,42,0.9));
+      border-radius: 0 0 18px 18px;
+    }
+
+    .video-container video::-webkit-media-controls-play-button {
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 900px) {
+      .video-container {
+        max-width: 100%;
+        margin: 15px auto 25px;
+      }
+      .video-container video {
+        border-radius: 16px;
+      }
+    }
+
     @media (max-width: 900px) {
       .slide { padding: 20px 30px; }
       .slide-title { font-size: 2rem; }
@@ -689,6 +736,7 @@
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
   </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -1214,8 +1262,15 @@
           <h2 class="slide-title">Miembros del Equipo</h2>
           <p class="slide-subtitle">Trabajo en pareja — 2da Evaluación</p>
 
+          <div class="video-container animate-in">
+            <video id="videoMiembros" controls autoplay muted loop playsinline>
+              <source src="video_miembros.mp4" type="video/mp4">
+              Tu navegador no soporta video HTML5.
+            </video>
+          </div>
+
           <div class="members-grid">
-            <div class="member-card animate-in">
+            <div class="member-card animate-in delay-1">
               <div class="member-avatar">👤</div>
               <div class="member-name">Gary Sinclair</div>
               <div class="member-role">Integrante 1</div>
@@ -1226,7 +1281,7 @@
               </div>
             </div>
 
-            <div class="member-card animate-in delay-1">
+            <div class="member-card animate-in delay-2">
               <div class="member-avatar">👤</div>
               <div class="member-name">Félix Estrada</div>
               <div class="member-role">Integrante 2</div>
@@ -1238,14 +1293,12 @@
             </div>
           </div>
 
-          <div class="closing-text animate-in delay-2">
+          <div class="closing-text animate-in delay-3">
             <p>💧 <strong>Aguas Residuales y Canaletas</strong> — 2da Evaluación</p>
             <p style="font-size: 0.9rem; margin-top: 8px;">Presentación elaborada con dedicación y creatividad</p>
           </div>
         </div>
-      </div>
-
-    </div>
+      </div>    </div>
   </div>
 
   <div class="nav-controls">
