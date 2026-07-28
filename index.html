@@ -661,9 +661,9 @@
 
     /* ===== VIDEO STYLES ===== */
     .video-container {
-      max-width: 600px;
+      max-width: 520px;
       width: 100%;
-      margin: 20px auto 30px;
+      margin: 15px auto 25px;
       border-radius: 20px;
       overflow: hidden;
       border: 2px solid rgba(255,255,255,0.1);
@@ -683,6 +683,8 @@
       height: auto;
       display: block;
       border-radius: 20px;
+      max-height: 55vh;
+      object-fit: contain;
     }
 
     /* Estilos personalizados para controles de video */
@@ -699,10 +701,11 @@
     @media (max-width: 900px) {
       .video-container {
         max-width: 100%;
-        margin: 15px auto 25px;
+        margin: 12px auto 20px;
       }
       .video-container video {
         border-radius: 16px;
+        max-height: 45vh;
       }
     }
 
@@ -1264,7 +1267,7 @@
 
           <div class="video-container animate-in">
             <video id="videoMiembros" controls autoplay muted loop playsinline>
-              <source src="video_miembros.mp4" type="video/mp4">
+              <source src="video_miembros_recortado.mp4" type="video/mp4">
               Tu navegador no soporta video HTML5.
             </video>
           </div>
